@@ -1,0 +1,63 @@
+<%- include('partials/header', { title: 'Home' }) %>
+
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+
+    <% if (currentUser) { %>
+      <section class="card composer mb-4">
+        <div class="card-body">
+          <h2 class="h5 mb-3">Write a new post</h2>
+          <form action="/posts" method="POST">
+            <div class="mb-3">
+              <label for="title" class="form-label">Title</label>
+              <input type="text" class="form-control" id="title" name="title" maxlength="255" required>
+            </div>
+            <div class="mb-3">
+              <label for="body" class="form-label">Body</label>
+              <textarea class="form-control" id="body" name="body" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-dark">Publish post</button>
+          </form>
+        </div>
+      </section>
+    <% } else { %>
+      <div class="alert alert-light border">
+        <a href="/signin">Sign in</a> or <a href="/signup">create an account</a> to write, edit, or delete your own posts.
+      </div>
+    <% } %>
+
+    <h1 class="h3 mb-3">Latest posts</h1>
+
+    <% if (posts.length === 0) { %>
+      <p class="text-muted">No posts yet. Be the first to write one.</p>
+    <% } %>
+
+    <% posts.forEach(function(post) { %>
+      <article class="card post mb-3">
+        <div class="card-body">
+          <h2 class="post-title h4"><%= post.title %></h2>
+          <p class="post-meta">
+            By <strong><%= post.creator_name %></strong> on
+            <time datetime="<%= new Date(post.date_created).toISOString() %>">
+              <%= new Date(post.date_created).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) %>
+            </time>
+          </p>
+          <p class="post-body"><%= post.body %></p>
+
+          <% if (currentUser && currentUser.user_id === post.creator_user_id) { %>
+            <div class="d-flex gap-2">
+              <a href="/posts/<%= post.blog_id %>/edit" class="btn btn-outline-dark btn-sm">Edit</a>
+              <form action="/posts/<%= post.blog_id %>/delete" method="POST"
+                    onsubmit="return confirm('Delete this post permanently?');">
+                <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+              </form>
+            </div>
+          <% } %>
+        </div>
+      </article>
+    <% }); %>
+
+  </div>
+</div>
+
+<%- include('partials/footer') %>

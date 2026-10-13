@@ -1,0 +1,33 @@
+<%- include('partials/header', { title: 'Account' }) %>
+<div class="row justify-content-center">
+  <div class="col-md-7 col-lg-6">
+    <div class="card">
+      <div class="card-body p-4">
+        <h1 class="h3 mb-3">Account settings</h1>
+        <% if (error) { %><div class="alert alert-danger"><%= error %></div><% } %>
+        <form action="/account" method="POST">
+          <div class="mb-3">
+            <label for="user_id" class="form-label">User ID</label>
+            <input type="text" class="form-control" id="user_id" name="user_id" value="<%= form.user_id %>" required>
+          </div>
+          <div class="mb-3">
+            <label for="new_password" class="form-label">New password</label>
+            <input type="password" class="form-control" id="new_password" name="new_password" minlength="6">
+            <div class="form-text">Leave blank to keep your current password.</div>
+          </div>
+          <hr>
+          <div class="mb-3">
+            <label for="current_password" class="form-label">Current password</label>
+            <input type="password" class="form-control" id="current_password" name="current_password" required>
+            <div class="form-text">Required to confirm any change.</div>
+          </div>
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-dark">Save changes</button>
+            <a href="/" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('partials/footer') %>
